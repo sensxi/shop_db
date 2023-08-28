@@ -21,8 +21,8 @@ namespace Task9.Controllers
         // GET: Group
         public async Task<IActionResult> Index()
         {
-                var applicationDbContext = _context.Groups.Include(t => t.Course);
-                return View(await applicationDbContext.ToListAsync());
+            var applicationDbContext = _context.Groups.Include(t => t.Course);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Group/AddOrEdit
@@ -71,6 +71,9 @@ namespace Task9.Controllers
                 return NotFound();
             }
 
+            var hasStudents = GroupHasStudents(tgroup.GroupId);
+            ViewData["HasStudents"] = hasStudents;
+
             return View(tgroup);
         }
 
@@ -86,9 +89,15 @@ namespace Task9.Controllers
             var tgroup = await _context.Groups.FindAsync(id);
             if (tgroup != null)
             {
+                if (GroupHasStudents(tgroup.GroupId))
+                {
+                    ViewData["ErrorMessage"] = "Cannot delete group with students.";
+                    return View("Delete", tgroup);
+                }
+
                 _context.Groups.Remove(tgroup);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -99,7 +108,7 @@ namespace Task9.Controllers
 
             return View(groups);
         }
-        
+
         [NonAction]
         public void PopulateCourse()
         {
@@ -108,6 +117,12 @@ namespace Task9.Controllers
             CourseCollection.Insert(0, DefaultCourse);
             ViewBag.Courses = CourseCollection;
         }
-        
+
+        private bool GroupHasStudents(int groupId)
+        {
+            return _context.Students.Any(s => s.GroupId == groupId);
+        }
+
+
     }
 }
