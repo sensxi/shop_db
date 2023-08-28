@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Task9.Models.Group>
+
+@{
+    ViewData["PageTitle"] = "List of groups for the some course";
+}
+
+<p>
+    <a asp-action="AddOrEdit">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-action="AddOrEdit" asp-route-id="@item.GroupId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.GroupId">Delete</a> |
+                    <a href="@Url.Action("StudentList", "Student", new { groupId = item.GroupId })">List of student for this group</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
