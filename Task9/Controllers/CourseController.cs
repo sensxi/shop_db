@@ -79,28 +79,41 @@ namespace Task9.Controllers
                         Problem("Entity set 'ApplicationDbContext.Courses'  is null.");
         }
 
-        // GET: Course/AddOrEdit
-        public IActionResult AddOrEdit(int id = 0)
+        // GET: Course/Add
+        public IActionResult Add()
         {
-            if (id == 0)
-                return View(new Course());
-            else
-                return View(_context.Courses.Find(id));
+            return View(new Course());
         }
 
-        // POST: Course/AddOrEdit
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Course/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit([Bind("CourseId,Name,Description")] Course course)
+        public async Task<IActionResult> Add([Bind("CourseId,Name,Description")] Course course)
         {
             if (ModelState.IsValid)
             {
-                if (course.CourseId == 0)
-                    _context.Add(course);
-                else
-                    _context.Update(course);
+                _context.Add(course);
+                
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(course);
+        }
+
+        // GET: Course/Edit
+        public IActionResult Edit(int id)
+        {
+                return View(_context.Courses.Find(id));
+        }
+
+        // POST: Course/Edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit([Bind("CourseId,Name,Description")] Course course)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Update(course);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
