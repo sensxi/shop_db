@@ -25,35 +25,51 @@ namespace Task9.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Student/AddOrEdit
-        public IActionResult AddOrEdit(int id = 0)
+        // GET: Student/Add
+        public IActionResult Add()
         {
             PopulateGroup();
-            if (id == 0)
-                return View(new Student());
-            else
-                return View(_context.Students.Find(id));
+            return View(new Student());
+            
         }
 
-        // POST: Student/AddOrEdit
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Student/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit([Bind("StudentId,GroupId,FirstName,LastName")] Student student)
+        public async Task<IActionResult> Add([Bind("StudentId,GroupId,FirstName,LastName")] Student student)
         {
             if (ModelState.IsValid)
             {
-                if (student.StudentId == 0)
-                    _context.Add(student);
-                else
-                    _context.Update(student);
+                _context.Add(student);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             PopulateGroup();
             return View(student);
         }
+
+        // GET: Student/Edit
+        public IActionResult Edit(int id = 0)
+        {
+            PopulateGroup();
+            return View(_context.Students.Find(id));
+        }
+
+        // POST: Student/Edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit([Bind("StudentId,GroupId,FirstName,LastName")] Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Update(student);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            PopulateGroup();
+            return View(student);
+        }
+        
         // GET: Student/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

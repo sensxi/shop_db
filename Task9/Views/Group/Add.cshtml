@@ -1,12 +1,12 @@
 ﻿@model Task9.Models.Group
 
 @{
-    ViewData["PageTitle"] = Model.GroupId == 0 ? "Create a new group" : "Edit group";
+    ViewData["PageTitle"] = "Create a new group";
 }
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddOrEdit">
+        <form asp-action="Add">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" name="GroupId" value="@Model.GroupId" />
             <div class="form-group">

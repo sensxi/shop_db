@@ -1,12 +1,12 @@
 ﻿@model Task9.Models.Student
 
 @{
-    ViewData["PageTitle"] = Model.StudentId == 0 ? "Create a new student" : "Edit student";
+    ViewData["PageTitle"] = "Edit student";
 }
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddOrEdit">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" name="StudentId" value="@Model.StudentId" />
             <div class="form-group">

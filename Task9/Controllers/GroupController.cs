@@ -25,29 +25,45 @@ namespace Task9.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Group/AddOrEdit
-        public IActionResult AddOrEdit(int id = 0)
+        // GET: Group/Add
+        public IActionResult Add()
         {
             PopulateCourse();
-            if (id == 0)
-                return View(new Group());
-            else
-                return View(_context.Groups.Find(id));
+            
+            return View(new Group());
         }
 
-        // POST: Group/AddOrEdit
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Group/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit([Bind("GroupId,CourseId,Name")] Group group)
+        public async Task<IActionResult> Add([Bind("GroupId,CourseId,Name")] Group group)
         {
             if (ModelState.IsValid)
             {
-                if (group.GroupId == 0)
-                    _context.Add(group);
-                else
-                    _context.Update(group);
+                _context.Add(group);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            PopulateCourse();
+            return View(group);
+        }
+
+
+        // GET: Group/Edit
+        public IActionResult Edit(int id)
+        {
+            PopulateCourse();
+            return View(_context.Groups.Find(id));
+        }
+
+        // POST: Group/Edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit([Bind("GroupId,CourseId,Name")] Group group)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Update(group);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
