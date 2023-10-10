@@ -6,30 +6,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Task9.Models;
+using Task9.Services;
 
 namespace Task9.Controllers
 {
     public class GroupController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IGroupService _groupService;
 
-        public GroupController(ApplicationDbContext context)
+        public GroupController(IGroupService groupService)
         {
-            _context = context;
+            _groupService = groupService;
         }
 
         // GET: Group
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Groups.Include(t => t.Course);
-            return View(await applicationDbContext.ToListAsync());
+            var groups = await _groupService.GetGroupsAsync();
+            return View(groups);
         }
 
         // GET: Group/Add
         public IActionResult Add()
         {
             PopulateCourse();
-            
+
             return View(new Group());
         }
 
@@ -40,8 +41,7 @@ namespace Task9.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(group);
-                await _context.SaveChangesAsync();
+                await _groupService.AddGroupAsync(group);
                 return RedirectToAction(nameof(Index));
             }
             PopulateCourse();
@@ -50,10 +50,11 @@ namespace Task9.Controllers
 
 
         // GET: Group/Edit
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             PopulateCourse();
-            return View(_context.Groups.Find(id));
+            var group = await _groupService.GetGroupByIdAsync(id);
+            return View(group);
         }
 
         // POST: Group/Edit
@@ -63,8 +64,7 @@ namespace Task9.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Update(group);
-                await _context.SaveChangesAsync();
+                await _groupService.EditGroupAsync(group);
                 return RedirectToAction(nameof(Index));
             }
             PopulateCourse();
@@ -74,20 +74,18 @@ namespace Task9.Controllers
         // GET: Group/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Groups == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var tgroup = await _context.Groups
-                .Include(t => t.Course)
-                .FirstOrDefaultAsync(m => m.GroupId == id);
+            var tgroup = await _groupService.GetGroupByIdAsync(id.Value);
             if (tgroup == null)
             {
                 return NotFound();
             }
 
-            var hasStudents = GroupHasStudents(tgroup.GroupId);
+            var hasStudents = await _groupService.GroupHasStudentsAsync(tgroup.GroupId);
             ViewData["HasStudents"] = hasStudents;
 
             return View(tgroup);
@@ -98,29 +96,22 @@ namespace Task9.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Groups == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Groups'  is null.");
-            }
-            var tgroup = await _context.Groups.FindAsync(id);
-            if (tgroup != null)
-            {
-                if (GroupHasStudents(tgroup.GroupId))
-                {
-                    ViewData["ErrorMessage"] = "Cannot delete group with students.";
-                    return View("Delete", tgroup);
-                }
 
-                _context.Groups.Remove(tgroup);
+            var hasStudents = await _groupService.GroupHasStudentsAsync(id);
+            if (hasStudents)
+            {
+                ViewData["ErrorMessage"] = "Cannot delete group with students.";
+                return View("Delete", await _groupService.GetGroupByIdAsync(id));
             }
 
-            await _context.SaveChangesAsync();
+            await _groupService.DeleteGroupAsync(id);
+
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> GroupList(int courseId)
         {
-            var groups = _context.Groups.Where(g => g.CourseId == courseId).ToList();
+            var groups = await _groupService.GetGroupsByCourseIdAsync(courseId);
 
             return View(groups);
         }
@@ -128,17 +119,8 @@ namespace Task9.Controllers
         [NonAction]
         public void PopulateCourse()
         {
-            var CourseCollection = _context.Courses.ToList();
-            Course DefaultCourse = new Course() { CourseId = 0, Name = "Choose a Category" };
-            CourseCollection.Insert(0, DefaultCourse);
-            ViewBag.Courses = CourseCollection;
+            var courseCollection = _groupService.GetCourseCollectionWithDefault();
+            ViewBag.Courses = courseCollection;
         }
-
-        private bool GroupHasStudents(int groupId)
-        {
-            return _context.Students.Any(s => s.GroupId == groupId);
-        }
-
-
     }
 }

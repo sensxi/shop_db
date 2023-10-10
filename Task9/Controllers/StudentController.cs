@@ -6,23 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Task9.Models;
+using Task9.Services;
 
 namespace Task9.Controllers
 {
     public class StudentController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IStudentService _studentService;
 
-        public StudentController(ApplicationDbContext context)
+        public StudentController(IStudentService studentService)
         {
-            _context = context;
+            _studentService = studentService;
         }
 
         // GET: Student
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Students.Include(s => s.Group);
-            return View(await applicationDbContext.ToListAsync());
+            var students = await _studentService.GetStudentsWithGroupsAsync();
+            return View(students);
         }
 
         // GET: Student/Add
@@ -40,8 +41,7 @@ namespace Task9.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(student);
-                await _context.SaveChangesAsync();
+                await _studentService.AddStudentAsync(student);
                 return RedirectToAction(nameof(Index));
             }
             PopulateGroup();
@@ -49,10 +49,15 @@ namespace Task9.Controllers
         }
 
         // GET: Student/Edit
-        public IActionResult Edit(int id = 0)
+        public async Task<IActionResult> Edit(int id = 0)
         {
             PopulateGroup();
-            return View(_context.Students.Find(id));
+            var student = await _studentService.GetStudentByIdAsync(id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+            return View(student);
         }
 
         // POST: Student/Edit
@@ -62,8 +67,7 @@ namespace Task9.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Update(student);
-                await _context.SaveChangesAsync();
+                await _studentService.EditStudentAsync(student);
                 return RedirectToAction(nameof(Index));
             }
             PopulateGroup();
@@ -73,14 +77,12 @@ namespace Task9.Controllers
         // GET: Student/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Students == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var student = await _context.Students
-                .Include(s => s.Group)
-                .FirstOrDefaultAsync(m => m.StudentId == id);
+            var student = await _studentService.GetStudentByIdAsync(id.Value);
             if (student == null)
             {
                 return NotFound();
@@ -94,34 +96,20 @@ namespace Task9.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Students == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Students'  is null.");
-            }
-            var student = await _context.Students.FindAsync(id);
-            if (student != null)
-            {
-                _context.Students.Remove(student);
-            }
-
-            await _context.SaveChangesAsync();
+            await _studentService.DeleteStudentAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> StudentList(int groupId)
         {
-            var students = _context.Students.Where(g => g.GroupId == groupId).ToList();
-
+            var students = _studentService.GetStudentsByGroupIdAsync(groupId).Result;
             return View(students);
         }
 
         [NonAction]
         public void PopulateGroup()
         {
-            var GroupCollection = _context.Groups.ToList();
-            Group DefaultGroup = new Group() { GroupId = 0, Name = "Choose a Category" };
-            GroupCollection.Insert(0, DefaultGroup);
-            ViewBag.Groups = GroupCollection;
+            ViewBag.Groups = _studentService.GetGroupsWithDefault();
         }
     }
 }

@@ -8,8 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 //Add custom services
 builder.Services.AddScoped<IDataSeedService, DataSeedService>();
-
 builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IGroupService, GroupService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
 
 //DI
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
