@@ -6,77 +6,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Task9.Models;
+using Task9.Services;
 
 namespace Task9.Controllers
 {
     public class CourseController : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public CourseController(ApplicationDbContext context)
+        private readonly ICourseService _courseService;
+        
+        public CourseController(ICourseService courseService)
         {
-            _context = context;
-        }
-
-        public IActionResult SeedDatabase()
-        {
-            // Check if the database is already seeded
-            if (_context.Courses.Any())
-            {
-                return Content("Database already seeded.");
-            }
-
-
-            List<Course> courses = new List<Course>
-            {
-                new Course { Name = "math", Description = "first course" },
-                new Course { Name = "english", Description = "second course" },
-                new Course { Name = "programming", Description = "course about programming in c#" },
-                new Course { Name = "philosophy", Description = "........." },
-                // Add more entities as needed
-            };
-
-            // Add the entities to the DbContext and save changes to the database
-            _context.Courses.AddRange(courses);
-            _context.SaveChanges();
-
-            List<Group> groups = new List<Group>
-            {
-                new Group { Name = "Group A", CourseId = courses[0].CourseId },
-                new Group { Name = "Group B", CourseId = courses[1].CourseId },
-                new Group { Name = "Group C", CourseId = courses[2].CourseId },
-                new Group { Name = "Group A(1)", CourseId = courses[0].CourseId },
-                new Group { Name = "Group A(2)", CourseId = courses[0].CourseId },
-                new Group { Name = "Group C(1)", CourseId = courses[2].CourseId }, 
-                // Add more groups as needed
-            };
-
-            _context.Groups.AddRange(groups);
-            _context.SaveChanges();
-
-            List<Student> students = new List<Student>
-            {
-                new Student { FirstName = "John", LastName = "Doe", GroupId = groups[0].GroupId },
-                new Student { FirstName = "Jane", LastName = "Smith", GroupId = groups[0].GroupId },
-                new Student { FirstName = "Michael", LastName = "Johnson", GroupId = groups[1].GroupId },
-                new Student { FirstName = "John", LastName = "Smith", GroupId = groups[0].GroupId },
-                new Student { FirstName = "Jane", LastName = "Johnson", GroupId = groups[1].GroupId },
-                new Student { FirstName = "Michael", LastName = "Shumaher", GroupId = groups[1].GroupId },
-                new Student { FirstName = "Test", LastName = "Test", GroupId = groups[2].GroupId },
-
-            };
-
-            _context.Students.AddRange(students);
-            _context.SaveChanges();
-            return Content("Database seeded successfully.");
+            _courseService = courseService;
         }
 
         // GET: Course
         public async Task<IActionResult> Index()
         {
-            return _context.Courses != null ?
-                        View(await _context.Courses.ToListAsync()) :
-                        Problem("Entity set 'ApplicationDbContext.Courses'  is null.");
+            var courses = await _courseService.GetCoursesAsync();
+
+            if (courses != null)
+            {
+                return View(courses);
+            }
+            else
+            {
+                return Problem("Entity set 'ApplicationDbContext.Courses' is null.");
+            }
         }
 
         // GET: Course/Add
@@ -92,18 +47,27 @@ namespace Task9.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(course);
-                
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (await _courseService.AddCourseAsync(course))
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(course);
         }
 
         // GET: Course/Edit
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-                return View(_context.Courses.Find(id));
+            var course = await _courseService.GetCourseByIdAsync(id);
+
+            if (course != null)
+            {
+                return View(course);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         // POST: Course/Edit
@@ -113,9 +77,10 @@ namespace Task9.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Update(course);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (await _courseService.UpdateCourseAsync(course))
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(course);
         }
@@ -123,13 +88,13 @@ namespace Task9.Controllers
         // GET: Course/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Courses == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.CourseId == id);
+            var course = await _courseService.GetCourseByIdAsync(id.Value);
+
             if (course == null)
             {
                 return NotFound();
@@ -143,25 +108,21 @@ namespace Task9.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Courses == null)
+            if (await _courseService.DeleteCourseAsync(id))
             {
-                return Problem("Entity set 'ApplicationDbContext.Courses'  is null.");
+                return RedirectToAction(nameof(Index));
             }
-            var course = await _context.Courses.FindAsync(id);
-            if (course != null)
+            else
             {
-                _context.Courses.Remove(course);
+                return Problem("Entity set 'ApplicationDbContext.Courses' is null.");
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         // GET: Course/GroupList/5
         public async Task<IActionResult> ListGroup(int courseId)
         {
             ViewData["CourseId"] = courseId;
-            var groups = _context.Groups.Where(g => g.CourseId == courseId).ToList();
+            var groups = await _courseService.GetGroupsByCourseIdAsync(courseId);
 
             return View(groups);
         }

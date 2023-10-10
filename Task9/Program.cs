@@ -1,10 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Task9.Models;
+using Task9.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+//Add custom services
+builder.Services.AddScoped<IDataSeedService, DataSeedService>();
+
+builder.Services.AddScoped<ICourseService, CourseService>();
 
 //DI
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
