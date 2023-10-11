@@ -1,6 +1,6 @@
 ﻿using Task9.Models;
 
-namespace Task9.Services
+namespace Task9.Services.CourseService
 {
     public interface ICourseService
     {

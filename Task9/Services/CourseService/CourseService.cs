@@ -3,7 +3,7 @@ using Task9.Models;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace Task9.Services
+namespace Task9.Services.CourseService
 {
     public class CourseService : ICourseService
     {
@@ -29,10 +29,10 @@ namespace Task9.Services
             _context.Add(course);
             await _context.SaveChangesAsync();
             return true;
-            
+
         }
 
-        public async Task<bool> UpdateCourseAsync(Course course)  
+        public async Task<bool> UpdateCourseAsync(Course course)
         {
             _context.Update(course);
             await _context.SaveChangesAsync();

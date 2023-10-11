@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Task9.Models;
 
-namespace Task9.Services
+namespace Task9.Services.GroupService
 {
     public class GroupService : IGroupService
     {

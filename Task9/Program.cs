@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Task9.Models;
 using Task9.Services;
+using Task9.Services.CourseService;
+using Task9.Services.GroupService;
+using Task9.Services.StudentService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +17,7 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 
 //DI
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectDb")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectDb")));
 
 
 var app = builder.Build();

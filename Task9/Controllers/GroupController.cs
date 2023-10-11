@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Task9.Models;
-using Task9.Services;
+using Task9.Services.GroupService;
 
 namespace Task9.Controllers
 {
