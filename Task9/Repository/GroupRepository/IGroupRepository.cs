@@ -1,10 +1,9 @@
 ﻿using Task9.Models;
 
-namespace Task9.Services.GroupService
+namespace Task9.Repository.GroupRepository
 {
-    public interface IGroupService
+    public interface IGroupRepository
     {
-        
         Task<List<Group>> GetGroupsAsync();
 
         Task<Group> GetGroupByIdAsync(int id);

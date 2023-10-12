@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Task9.Models;
+using Task9.Data;
 
 #nullable disable
 
 namespace Task9.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231011103515_Second migration")]
-    partial class Secondmigration
+    [Migration("20231011150912_Initial create")]
+    partial class Initialcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

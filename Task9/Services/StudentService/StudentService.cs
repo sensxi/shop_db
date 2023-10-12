@@ -1,60 +1,52 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Task9.Models;
+using Task9.Data;
+using Task9.Repository.StudentRepository;
 
 namespace Task9.Services.StudentService
 {
     public class StudentService : IStudentService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IStudentRepository _studentRepository;
 
-        public StudentService(ApplicationDbContext context)
+        public StudentService(IStudentRepository studentRepository)
         {
-            _context = context;
+            _studentRepository = studentRepository;
         }
 
         public async Task<Student> GetStudentByIdAsync(int id)
         {
-            return await _context.Students.FindAsync(id);
+            return await _studentRepository.GetStudentByIdAsync(id);
         }
 
         public async Task<List<Student>> GetStudentsWithGroupsAsync()
         {
-            return await _context.Students.Include(s => s.Group).ToListAsync();
+            return await _studentRepository.GetStudentsWithGroupsAsync();
         }
 
         public async Task<List<Student>> GetStudentsByGroupIdAsync(int groupId)
         {
-            return await _context.Students.Where(g => g.GroupId == groupId).ToListAsync();
+            return await _studentRepository.GetStudentsByGroupIdAsync(groupId);
         }
 
         public List<Group> GetGroupsWithDefault()
         {
-            var GroupCollection = _context.Groups.ToList();
-            Group DefaultGroup = new Group() { GroupId = 0, Name = "Choose a Category" };
-            GroupCollection.Insert(0, DefaultGroup);
-            return GroupCollection;
+            return _studentRepository.GetGroupsWithDefault();
         }
 
         public async Task AddStudentAsync(Student student)
         {
-            _context.Add(student);
-            await _context.SaveChangesAsync();
+            await _studentRepository.AddStudentAsync(student);
         }
 
         public async Task EditStudentAsync(Student student)
         {
-            _context.Update(student);
-            await _context.SaveChangesAsync();
+            await _studentRepository.EditStudentAsync(student);
         }
 
         public async Task DeleteStudentAsync(int id)
         {
-            var student = await _context.Students.FindAsync(id);
-            if (student != null)
-            {
-                _context.Students.Remove(student);
-                await _context.SaveChangesAsync();
-            }
+            await _studentRepository.DeleteStudentAsync(id);
         }
 
 

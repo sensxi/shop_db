@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Task9.Models;
-
+using Task9.Data;
 namespace Task9.Services
 {
     public class DataSeedService : IDataSeedService

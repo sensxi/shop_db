@@ -1,19 +1,32 @@
 using Microsoft.EntityFrameworkCore;
 using Task9.Models;
+using Task9.Data;
 using Task9.Services;
 using Task9.Services.CourseService;
 using Task9.Services.GroupService;
 using Task9.Services.StudentService;
+using Task9.Repository.CourseRepository;
+using Task9.Repository.GroupRepository;
+using Task9.Repository.StudentRepository;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 //Add custom services
 builder.Services.AddScoped<IDataSeedService, DataSeedService>();
+
 builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+
 builder.Services.AddScoped<IGroupService, GroupService>();
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
 //DI
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

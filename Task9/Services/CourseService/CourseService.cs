@@ -1,59 +1,49 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Task9.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Task9.Data;
+using Task9.Repository.CourseRepository;
 
 namespace Task9.Services.CourseService
 {
     public class CourseService : ICourseService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICourseRepository _courseRepository;
 
-        public CourseService(ApplicationDbContext context)
+        public CourseService(ICourseRepository courseRepository)
         {
-            _context = context;
+            _courseRepository = courseRepository;
         }
 
         public async Task<List<Course>> GetCoursesAsync()
         {
-            return await _context.Courses.ToListAsync();
+            return await _courseRepository.GetCoursesAsync();
         }
 
         public async Task<Course> GetCourseByIdAsync(int id)
         {
-            return await _context.Courses.FindAsync(id);
+            return await _courseRepository.GetCourseByIdAsync(id);
         }
 
         public async Task<bool> AddCourseAsync(Course course)
         {
-            _context.Add(course);
-            await _context.SaveChangesAsync();
-            return true;
+            return await _courseRepository.AddCourseAsync(course);
 
         }
 
         public async Task<bool> UpdateCourseAsync(Course course)
         {
-            _context.Update(course);
-            await _context.SaveChangesAsync();
-            return true;
+            return await _courseRepository.UpdateCourseAsync(course);
         }
 
         public async Task<bool> DeleteCourseAsync(int id)
         {
-            var course = await _context.Courses.FindAsync(id);
-            if (course != null)
-            {
-                _context.Courses.Remove(course);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            return false;
+            return await _courseRepository.DeleteCourseAsync(id);
         }
 
         public async Task<List<Group>> GetGroupsByCourseIdAsync(int courseId)
         {
-            return await _context.Groups.Where(g => g.CourseId == courseId).ToListAsync();
+            return await _courseRepository.GetGroupsByCourseIdAsync(courseId);
         }
 
 

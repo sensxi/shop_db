@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Task9.Models;
 
-namespace Task9.Models
+namespace Task9.Data
 {
     public class ApplicationDbContext : DbContext
     {
