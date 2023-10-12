@@ -5,32 +5,68 @@ using Task9.Data;
 using Task9.Services.GroupService;
 using Xunit;
 using Task9.Repository;
+using Task9.Repository.GroupRepository;
 
 namespace Task9Test.Moq
 {
     public class GroupServiceTests
     {
         private readonly GroupService _sut;
-        private readonly Mock<ApplicationDbContext> _dbContextMock = new Mock<ApplicationDbContext>();
+        private readonly Mock<IGroupRepository> _groupRepoMock = new Mock<IGroupRepository>();
 
         public GroupServiceTests()
         {
-            //_sut = new GroupService();
+            _sut = new GroupService(_groupRepoMock.Object);
         }
         
 
         [Fact]
         public async Task GetGroupByIdAsync_ShouldReturnGroup_WhenGroupExist()
         {
-            //Arrange
+            // Arrange
+            int groupId = 1; 
+            var expectedGroup = new Group { GroupId = groupId, Name = "My group" }; 
 
-            //Act
+            _groupRepoMock.Setup(repo => repo.GetGroupByIdAsync(groupId)).ReturnsAsync(expectedGroup);
 
-            //Assert
+            // Act
+            var result = await _sut.GetGroupByIdAsync(groupId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(groupId, result.GroupId);
+            Assert.Equal("My group", result.Name);
         }
 
+        [Fact]
+        public async Task GroupHasStudentsAsync_ShouldReturnTrue_WhenGroupHasStudents()
+        {
+            // Arrange
+            int groupId = 1;
 
+            _groupRepoMock.Setup(repo => repo.GroupHasStudentsAsync(groupId)).ReturnsAsync(true);
 
+            // Act
+            var result = await _sut.GroupHasStudentsAsync(groupId);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task GroupHasStudentsAsync_ShouldReturnFalse_WhenGroupHasNoStudents()
+        {
+            // Arrange
+            int groupId = 1;
+
+            _groupRepoMock.Setup(repo => repo.GroupHasStudentsAsync(groupId)).ReturnsAsync(false);
+
+            // Act
+            var result = await _sut.GroupHasStudentsAsync(groupId);
+
+            // Assert
+            Assert.False(result);
+        }
 
     }
 
