@@ -114,17 +114,13 @@ namespace Task9.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-
-            var hasStudents = await _groupService.GroupHasStudentsAsync(id);
-            if (hasStudents)
+            if (await _groupService.DeleteAsync(id))
             {
-                ViewData["ErrorMessage"] = "Cannot delete group with students.";
-                return View("Delete", await _groupService.GetAsync(id));
+                return RedirectToAction(nameof(Index));
             }
 
-            await _groupService.DeleteAsync(id);
-
-            return RedirectToAction(nameof(Index));
+            ViewData["ErrorMessage"] = "Cannot delete group with students.";
+            return View("Delete", await _groupService.GetAsync(id));
         }
 
         public async Task<IActionResult> GroupList(int courseId)

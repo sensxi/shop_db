@@ -52,6 +52,11 @@ namespace Task9.Services.GroupService
 
         public async Task<bool> DeleteAsync(int id)
         {
+            var hasStudent = await _groupRepository.GroupHasStudentsAsync(id);
+            if (hasStudent)
+            {
+                return false;
+            }
             return await _groupRepository.DeleteAsync(id);
         }
     }

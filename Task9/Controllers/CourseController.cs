@@ -53,7 +53,7 @@ namespace Task9.Controllers
                 }
                 else
                 {
-                    return Content($"Cours with name: {course.Name} or description {course.Description} already exist");
+                    return Content($"Cours with name: {course.Name} already exist");
                 }
             }
             return View(course);
@@ -87,7 +87,7 @@ namespace Task9.Controllers
                 }
                 else
                 {
-                    return Content($"Cours with name: {course.Name} or description {course.Description} already exist");
+                    return Content($"Cours with name: {course.Name} already exist");
                 }
             }
             return View(course);
@@ -116,17 +116,13 @@ namespace Task9.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var hasGroup = await _courseService.CourseHasGroupAsync(id);
-            if (hasGroup)
+            if (await _courseService.DeleteAsync(id))
             {
-                ViewData["ErrorMessage"] = "Cannot delete group with students.";
-                return View("Delete", await _courseService.GetAsync(id));
+                return RedirectToAction(nameof(Index));
             }
 
-            await _courseService.DeleteAsync(id);
-
-            return RedirectToAction(nameof(Index));
-
+            ViewData["ErrorMessage"] = "Cannot delete group with students.";
+            return View("Delete", await _courseService.GetAsync(id));
         }
     }
 }

@@ -29,10 +29,10 @@ namespace Task9.Repository.CourseRepository
         }
         public async Task<bool> AddAsync(Course course)
         {
-            _context.Add(course);
-
             if (await DubbingCheck(course))
                 return false;
+
+            _context.Add(course);
             await _context.SaveChangesAsync();
             return true;
 
@@ -40,11 +40,10 @@ namespace Task9.Repository.CourseRepository
 
         public async Task<bool> UpdateAsync(Course course)
         {
-            _context.Update(course);
-
             if (await DubbingCheck(course))
                 return false;
 
+            _context.Update(course);
             await _context.SaveChangesAsync();
             return true;
         }
@@ -63,7 +62,7 @@ namespace Task9.Repository.CourseRepository
 
         public async Task<bool> DubbingCheck(Course course)
         {
-            return await _context.Courses.AnyAsync(c => c.Name == course.Name && c.Description == course.Description);
+            return await _context.Courses.AnyAsync(c => c.Name == course.Name);
         }
 
 
