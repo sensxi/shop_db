@@ -5,20 +5,20 @@ namespace Task9.Services.GroupService
     public interface IGroupService
     {
         
-        Task<List<Group>> GetGroupsAsync();
+        Task<List<Group>> GetAllAsync();
 
-        Task<Group> GetGroupByIdAsync(int id);
+        Task<Group> GetAsync(int id);
 
-        Task<List<Group>> GetGroupsByCourseIdAsync(int courseId);
+        Task<List<Group>> GetAllAsync(int courseId);
 
-        List<Course> GetCourseCollectionWithDefault();
+        List<Course> GetCourseWithDefault();
 
         Task<bool> GroupHasStudentsAsync(int groupId);
 
-        Task AddGroupAsync(Group group);
+        Task<bool> AddAsync(Group group);
 
-        Task EditGroupAsync(Group group);
+        Task<bool> UpdateAsync(Group group);
 
-        Task DeleteGroupAsync(int groupId);
+        Task<bool> DeleteAsync(int groupId);
     }
 }

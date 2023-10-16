@@ -15,44 +15,44 @@ namespace Task9.Services.GroupService
             _groupRepository = groupRepository ;
         }
 
-        public async Task<List<Group>> GetGroupsAsync()
+        public async Task<List<Group>> GetAllAsync()
         {
-            return await _groupRepository.GetGroupsAsync();
+            return await _groupRepository.GetAllAsync();
         }
 
-        public async Task<Group> GetGroupByIdAsync(int id)
+        public async Task<Group> GetAsync(int id)
         {
-            return await _groupRepository.GetGroupByIdAsync(id);
+            return await _groupRepository.GetAsync(id);
         }
 
-        public async Task<List<Group>> GetGroupsByCourseIdAsync(int courseId)
+        public async Task<List<Group>> GetAllAsync(int courseId)
         {
-            return await _groupRepository.GetGroupsByCourseIdAsync(courseId);
+            return await _groupRepository.GetAllAsync(courseId);
         }
 
-        public List<Course> GetCourseCollectionWithDefault()
+        public List<Course> GetCourseWithDefault()
         {
-            return _groupRepository.GetCourseCollectionWithDefault();
+            return _groupRepository.GetCourseWithDefault();
         }
 
-        public async Task<bool> GroupHasStudentsAsync(int groupId)
+        public async Task<bool> GroupHasStudentsAsync(int id)
         {
-            return await _groupRepository.GroupHasStudentsAsync(groupId);
+            return await _groupRepository.GroupHasStudentsAsync(id);
         }
 
-        public async Task AddGroupAsync(Group group)
+        public async Task<bool> AddAsync(Group group)
         {
-            await _groupRepository.AddGroupAsync(group);
+            return await _groupRepository.AddAsync(group);
         }
 
-        public async Task EditGroupAsync(Group group)
+        public async Task<bool> UpdateAsync(Group group)
         {
-            await _groupRepository.EditGroupAsync(group);
+            return await _groupRepository.EditAsync(group);
         }
 
-        public async Task DeleteGroupAsync(int groupId)
+        public async Task<bool> DeleteAsync(int id)
         {
-            await _groupRepository.DeleteGroupAsync(groupId);
+            return await _groupRepository.DeleteAsync(id);
         }
     }
 }

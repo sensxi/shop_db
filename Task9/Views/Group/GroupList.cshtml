@@ -30,9 +30,9 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.GroupId">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.GroupId">Delete</a> |
-                    <a href="@Url.Action("StudentList", "Student", new { groupId = item.GroupId })">List of student for this group</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a href="@Url.Action("StudentList", "Student", new { groupId = item.Id })">List of student for this group</a>
                 </td>
             </tr>
         }

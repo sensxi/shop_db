@@ -5,7 +5,7 @@ namespace Task9.Models
     public class Student
     {
         [Key]
-        public int StudentId { get; set; }
+        public int Id { get; set; }
 
         public int GroupId { get; set; }
         public Group? Group { get; set; }

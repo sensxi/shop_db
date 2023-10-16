@@ -1,14 +1,14 @@
 ﻿@model Task9.Models.Course
 
 @{
-    ViewData["PageTitle"] = "Create a new course";
+    ViewData["PageTitle"] = "Edit course";
 }
 
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="CourseId" value="@Model.CourseId" />
+            <input type="hidden" name="Id" value="@Model.Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />

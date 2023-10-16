@@ -8,13 +8,13 @@
     <div class="col-md-4">
         <form asp-action="Add">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="StudentId" value="@Model.StudentId" />
+            <input type="hidden" name="Id" value="@Model.Id" />
             <div class="form-group">
                 <label asp-for="GroupId" class="control-label"></label>
                 <select asp-for="GroupId" class="form-control">
                     @foreach (var course in ViewBag.Groups)
                     {
-                        <option value="@course.GroupId">@course.Name</option>
+                        <option value="@course.Id">@course.Name</option>
                     }
                 </select>
                 <span asp-validation-for="GroupId" class="text-danger"></span>

@@ -13,54 +13,69 @@ namespace Task9.Repository.GroupRepository
             _context = context;
         }
 
-        public async Task<List<Group>> GetGroupsAsync()
+        public async Task<List<Group>> GetAllAsync()
         {
             return await _context.Groups.Include(t => t.Course).ToListAsync();
         }
 
-        public async Task<Group> GetGroupByIdAsync(int id)
+        public async Task<Group> GetAsync(int id)
         {
             return await _context.Groups.FindAsync(id);
         }
 
-        public async Task<List<Group>> GetGroupsByCourseIdAsync(int courseId)
+        public async Task<List<Group>> GetAllAsync(int courseId)
         {
-            return await _context.Groups.Where(g => g.CourseId == courseId).ToListAsync();
+            return await _context.Groups.Where(g => g.Id == courseId).ToListAsync();
         }
 
-        public List<Course> GetCourseCollectionWithDefault()
+        public List<Course> GetCourseWithDefault()
         {
             var courseCollection = _context.Courses.ToList();
-            Course defaultCourse = new Course() { CourseId = 0, Name = "Choose a Category" };
+            Course defaultCourse = new Course() { Id = 0, Name = "Choose a Category" };
             courseCollection.Insert(0, defaultCourse);
             return courseCollection;
         }
 
-        public async Task<bool> GroupHasStudentsAsync(int groupId)
+        public async Task<bool> GroupHasStudentsAsync(int id)
         {
-            return await _context.Students.AnyAsync(s => s.GroupId == groupId);
+            return await _context.Students.AnyAsync(s => s.Id == id);
         }
 
-        public async Task AddGroupAsync(Group group)
+        public async Task<bool> AddAsync(Group group)
         {
+            if (await DubbingCheck(group))
+                return false;
+
             _context.Add(group);
             await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task EditGroupAsync(Group group)
+        public async Task<bool> EditAsync(Group group)
         {
+            if (await DubbingCheck(group))
+                return false;
+
             _context.Update(group);
             await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task DeleteGroupAsync(int groupId)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var group = await _context.Groups.FindAsync(groupId);
+            var group = await _context.Groups.FindAsync(id);
             if (group != null)
             {
                 _context.Groups.Remove(group);
                 await _context.SaveChangesAsync();
+                return true;
             }
+            return false;
+        }
+
+        public async Task<bool> DubbingCheck(Group group)
+        {
+            return await _context.Groups.AnyAsync(c => c.Name == group.Name && c.CourseId == group.CourseId);
         }
     }
 }

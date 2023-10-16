@@ -22,14 +22,14 @@ namespace Task9.Controllers
         // GET: Student
         public async Task<IActionResult> Index()
         {
-            var students = await _studentService.GetStudentsWithGroupsAsync();
+            var students = await _studentService.GetAllAsync();
             return View(students);
         }
 
         // GET: Student/Add
         public IActionResult Add()
         {
-            PopulateGroup();
+            ViewBag.Groups = _studentService.GetGroupsWithDefault();
             return View(new Student());
             
         }
@@ -37,22 +37,22 @@ namespace Task9.Controllers
         // POST: Student/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add([Bind("StudentId,GroupId,FirstName,LastName")] Student student)
+        public async Task<IActionResult> Add([Bind("Id,GroupId,FirstName,LastName")] Student student)
         {
             if (ModelState.IsValid)
             {
-                await _studentService.AddStudentAsync(student);
+                await _studentService.AddAsync(student);
                 return RedirectToAction(nameof(Index));
             }
-            PopulateGroup();
+            ViewBag.Groups = _studentService.GetGroupsWithDefault();
             return View(student);
         }
 
         // GET: Student/Edit
         public async Task<IActionResult> Edit(int id = 0)
         {
-            PopulateGroup();
-            var student = await _studentService.GetStudentByIdAsync(id);
+            ViewBag.Groups = _studentService.GetGroupsWithDefault();
+            var student = await _studentService.GetAsync(id);
             if (student == null)
             {
                 return NotFound();
@@ -63,14 +63,14 @@ namespace Task9.Controllers
         // POST: Student/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("StudentId,GroupId,FirstName,LastName")] Student student)
+        public async Task<IActionResult> Edit([Bind("Id,GroupId,FirstName,LastName")] Student student)
         {
             if (ModelState.IsValid)
             {
-                await _studentService.EditStudentAsync(student);
+                await _studentService.UpdateAsync(student);
                 return RedirectToAction(nameof(Index));
             }
-            PopulateGroup();
+            ViewBag.Groups = _studentService.GetGroupsWithDefault();
             return View(student);
         }
         
@@ -82,7 +82,7 @@ namespace Task9.Controllers
                 return NotFound();
             }
 
-            var student = await _studentService.GetStudentByIdAsync(id.Value);
+            var student = await _studentService.GetAsync(id.Value);
             if (student == null)
             {
                 return NotFound();
@@ -96,20 +96,14 @@ namespace Task9.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _studentService.DeleteStudentAsync(id);
+            await _studentService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> StudentList(int groupId)
         {
-            var students = _studentService.GetStudentsByGroupIdAsync(groupId).Result;
+            var students = _studentService.GetAllAsync(groupId).Result;
             return View(students);
-        }
-
-        [NonAction]
-        public void PopulateGroup()
-        {
-            ViewBag.Groups = _studentService.GetGroupsWithDefault();
         }
     }
 }

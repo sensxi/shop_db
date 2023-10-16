@@ -35,12 +35,12 @@ namespace Task9.Services
 
             List<Group> groups = new List<Group>
             {
-                new Group { Name = "Group A", CourseId = courses[0].CourseId },
-                new Group { Name = "Group B", CourseId = courses[1].CourseId },
-                new Group { Name = "Group C", CourseId = courses[2].CourseId },
-                new Group { Name = "Group A(1)", CourseId = courses[0].CourseId },
-                new Group { Name = "Group A(2)", CourseId = courses[0].CourseId },
-                new Group { Name = "Group C(1)", CourseId = courses[2].CourseId }, 
+                new Group { Name = "Group A", CourseId = courses[0].Id },
+                new Group { Name = "Group B", CourseId = courses[1].Id },
+                new Group { Name = "Group C", CourseId = courses[2].Id },
+                new Group { Name = "Group A(1)", CourseId = courses[0].Id },
+                new Group { Name = "Group A(2)", CourseId = courses[0].Id },
+                new Group { Name = "Group C(1)", CourseId = courses[2].Id }, 
                 // Add more groups as needed
             };
 
@@ -49,13 +49,13 @@ namespace Task9.Services
 
             List<Student> students = new List<Student>
             {
-                new Student { FirstName = "John", LastName = "Doe", GroupId = groups[0].GroupId },
-                new Student { FirstName = "Jane", LastName = "Smith", GroupId = groups[0].GroupId },
-                new Student { FirstName = "Michael", LastName = "Johnson", GroupId = groups[1].GroupId },
-                new Student { FirstName = "John", LastName = "Smith", GroupId = groups[0].GroupId },
-                new Student { FirstName = "Jane", LastName = "Johnson", GroupId = groups[1].GroupId },
-                new Student { FirstName = "Michael", LastName = "Shumaher", GroupId = groups[1].GroupId },
-                new Student { FirstName = "Test", LastName = "Test", GroupId = groups[2].GroupId },
+                new Student { FirstName = "John", LastName = "Doe", GroupId = groups[0].Id },
+                new Student { FirstName = "Jane", LastName = "Smith", GroupId = groups[0].Id },
+                new Student { FirstName = "Michael", LastName = "Johnson", GroupId = groups[1].Id },
+                new Student { FirstName = "John", LastName = "Smith", GroupId = groups[0].Id },
+                new Student { FirstName = "Jane", LastName = "Johnson", GroupId = groups[1].Id },
+                new Student { FirstName = "Michael", LastName = "Shumaher", GroupId = groups[1].Id },
+                new Student { FirstName = "Test", LastName = "Test", GroupId = groups[2].Id },
 
             };
 

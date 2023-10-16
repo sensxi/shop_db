@@ -5,7 +5,7 @@ namespace Task9.Models
     public class Course
     {
         [Key]
-        public int CourseId { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
 

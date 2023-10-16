@@ -32,9 +32,9 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.CourseId">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.CourseId">Delete</a> |
-                    <a href="@Url.Action("GroupList", "Group", new { courseId = item.CourseId })">List of group for this course</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a href="@Url.Action("GroupList", "Group", new { courseId = item.Id })">List of group for this course</a>
                 </td>
             </tr>
         }

@@ -14,19 +14,19 @@ namespace Task9.Services.StudentService
             _studentRepository = studentRepository;
         }
 
-        public async Task<Student> GetStudentByIdAsync(int id)
+        public async Task<List<Student>> GetAllAsync()
         {
-            return await _studentRepository.GetStudentByIdAsync(id);
+            return await _studentRepository.GetAllAsync();
         }
 
-        public async Task<List<Student>> GetStudentsWithGroupsAsync()
+        public async Task<Student> GetAsync(int id)
         {
-            return await _studentRepository.GetStudentsWithGroupsAsync();
+            return await _studentRepository.GetAsync(id);
         }
 
-        public async Task<List<Student>> GetStudentsByGroupIdAsync(int groupId)
+        public async Task<List<Student>> GetAllAsync(int groupId)
         {
-            return await _studentRepository.GetStudentsByGroupIdAsync(groupId);
+            return await _studentRepository.GetAllAsync(groupId);
         }
 
         public List<Group> GetGroupsWithDefault()
@@ -34,19 +34,19 @@ namespace Task9.Services.StudentService
             return _studentRepository.GetGroupsWithDefault();
         }
 
-        public async Task AddStudentAsync(Student student)
+        public async Task<bool> AddAsync(Student student)
         {
-            await _studentRepository.AddStudentAsync(student);
+           return await _studentRepository.AddAsync(student);
         }
 
-        public async Task EditStudentAsync(Student student)
+        public async Task<bool> UpdateAsync(Student student)
         {
-            await _studentRepository.EditStudentAsync(student);
+            return await _studentRepository.UpdateAsync(student);
         }
 
-        public async Task DeleteStudentAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            await _studentRepository.DeleteStudentAsync(id);
+            return await _studentRepository.DeleteAsync(id);
         }
 
 

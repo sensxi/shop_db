@@ -22,7 +22,7 @@ namespace Task9.Controllers
         // GET: Course
         public async Task<IActionResult> Index()
         {
-            var courses = await _courseService.GetCoursesAsync();
+            var courses = await _courseService.GetAllAsync();
 
             if (courses != null)
             {
@@ -43,13 +43,17 @@ namespace Task9.Controllers
         // POST: Course/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add([Bind("CourseId,Name,Description")] Course course)
+        public async Task<IActionResult> Add([Bind("Id,Name,Description")] Course course)
         {
             if (ModelState.IsValid)
             {
-                if (await _courseService.AddCourseAsync(course))
+                if (await _courseService.AddAsync(course))
                 {
                     return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return Content($"Cours with name: {course.Name} or description {course.Description} already exist");
                 }
             }
             return View(course);
@@ -58,7 +62,7 @@ namespace Task9.Controllers
         // GET: Course/Edit
         public async Task<IActionResult> Edit(int id)
         {
-            var course = await _courseService.GetCourseByIdAsync(id);
+            var course = await _courseService.GetAsync(id);
 
             if (course != null)
             {
@@ -73,13 +77,17 @@ namespace Task9.Controllers
         // POST: Course/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("CourseId,Name,Description")] Course course)
+        public async Task<IActionResult> Edit([Bind("Id,Name,Description")] Course course)
         {
             if (ModelState.IsValid)
             {
-                if (await _courseService.UpdateCourseAsync(course))
+                if (await _courseService.UpdateAsync(course))
                 {
                     return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return Content($"Cours with name: {course.Name} or description {course.Description} already exist");
                 }
             }
             return View(course);
@@ -93,7 +101,7 @@ namespace Task9.Controllers
                 return NotFound();
             }
 
-            var course = await _courseService.GetCourseByIdAsync(id.Value);
+            var course = await _courseService.GetAsync(id.Value);
 
             if (course == null)
             {
@@ -108,7 +116,7 @@ namespace Task9.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _courseService.DeleteCourseAsync(id))
+            if (await _courseService.DeleteAsync(id))
             {
                 return RedirectToAction(nameof(Index));
             }
@@ -122,7 +130,7 @@ namespace Task9.Controllers
         public async Task<IActionResult> ListGroup(int courseId)
         {
             ViewData["CourseId"] = courseId;
-            var groups = await _courseService.GetGroupsByCourseIdAsync(courseId);
+            var groups = await _courseService.GetAllAsync(courseId);
 
             return View(groups);
         }

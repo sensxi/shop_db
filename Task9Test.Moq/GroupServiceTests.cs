@@ -25,16 +25,16 @@ namespace Task9Test.Moq
         {
             // Arrange
             int groupId = 1; 
-            var expectedGroup = new Group { GroupId = groupId, Name = "My group" }; 
+            var expectedGroup = new Group { Id = groupId, Name = "My group" }; 
 
-            _groupRepoMock.Setup(repo => repo.GetGroupByIdAsync(groupId)).ReturnsAsync(expectedGroup);
+            _groupRepoMock.Setup(repo => repo.GetAsync(groupId)).ReturnsAsync(expectedGroup);
 
             // Act
-            var result = await _sut.GetGroupByIdAsync(groupId);
+            var result = await _sut.GetAsync(groupId);
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(groupId, result.GroupId);
+            Assert.Equal(groupId, result.Id);
             Assert.Equal("My group", result.Name);
         }
 

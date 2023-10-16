@@ -4,18 +4,18 @@ namespace Task9.Services.StudentService
 {
     public interface IStudentService
     {
-        Task<Student> GetStudentByIdAsync(int id);
+        Task<Student> GetAsync(int id);
 
-        Task<List<Student>> GetStudentsWithGroupsAsync();
+        Task<List<Student>> GetAllAsync();
 
-        Task<List<Student>> GetStudentsByGroupIdAsync(int groupId);
+        Task<List<Student>> GetAllAsync(int groupId);
 
         List<Group> GetGroupsWithDefault();
 
-        Task AddStudentAsync(Student student);
+        Task<bool> AddAsync(Student student);
 
-        Task EditStudentAsync(Student student);
+        Task<bool> UpdateAsync(Student student);
 
-        Task DeleteStudentAsync(int id);
+        Task<bool> DeleteAsync(int id);
     }
 }

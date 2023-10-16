@@ -15,37 +15,35 @@ namespace Task9.Services.CourseService
             _courseRepository = courseRepository;
         }
 
-        public async Task<List<Course>> GetCoursesAsync()
+        public async Task<List<Course>> GetAllAsync()
         {
-            return await _courseRepository.GetCoursesAsync();
+            return await _courseRepository.GetAllAsync();
         }
 
-        public async Task<Course> GetCourseByIdAsync(int id)
+        public async Task<Course> GetAsync(int id)
         {
-            return await _courseRepository.GetCourseByIdAsync(id);
+            return await _courseRepository.GetAsync(id);
         }
 
-        public async Task<bool> AddCourseAsync(Course course)
+        public async Task<bool> AddAsync(Course course)
         {
-            return await _courseRepository.AddCourseAsync(course);
-
+            return await _courseRepository.AddAsync(course);
         }
 
-        public async Task<bool> UpdateCourseAsync(Course course)
+        public async Task<bool> UpdateAsync(Course course)
         {
-            return await _courseRepository.UpdateCourseAsync(course);
+            return await _courseRepository.UpdateAsync(course);
         }
 
-        public async Task<bool> DeleteCourseAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            return await _courseRepository.DeleteCourseAsync(id);
+            return await _courseRepository.DeleteAsync(id);
         }
 
-        public async Task<List<Group>> GetGroupsByCourseIdAsync(int courseId)
+        public async Task<List<Group>> GetAllAsync(int courseId)
         {
-            return await _courseRepository.GetGroupsByCourseIdAsync(courseId);
+            return await _courseRepository.GetAllAsync(courseId);
         }
-
 
     }
 }

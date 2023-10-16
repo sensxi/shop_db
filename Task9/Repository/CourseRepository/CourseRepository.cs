@@ -13,32 +13,44 @@ namespace Task9.Repository.CourseRepository
             _context = context;
         }
 
-        public async Task<List<Course>> GetCoursesAsync()
+        public async Task<List<Course>> GetAllAsync()
         {
             return await _context.Courses.ToListAsync();
         }
 
-        public async Task<Course> GetCourseByIdAsync(int id)
+        public async Task<List<Group>> GetAllAsync(int id)
+        {
+            return await _context.Groups.Where(g => g.Id == id).ToListAsync();
+        }
+
+        public async Task<Course> GetAsync(int id)
         {
             return await _context.Courses.FindAsync(id);
         }
 
-        public async Task<bool> AddCourseAsync(Course course)
+        public async Task<bool> AddAsync(Course course)
         {
             _context.Add(course);
+
+            if (await DubbingCheck(course))
+                return false;
             await _context.SaveChangesAsync();
             return true;
 
         }
 
-        public async Task<bool> UpdateCourseAsync(Course course)
+        public async Task<bool> UpdateAsync(Course course)
         {
             _context.Update(course);
+
+            if (await DubbingCheck(course))
+                return false;
+
             await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> DeleteCourseAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var course = await _context.Courses.FindAsync(id);
             if (course != null)
@@ -50,10 +62,11 @@ namespace Task9.Repository.CourseRepository
             return false;
         }
 
-        public async Task<List<Group>> GetGroupsByCourseIdAsync(int courseId)
+        public async Task<bool> DubbingCheck(Course course)
         {
-            return await _context.Groups.Where(g => g.CourseId == courseId).ToListAsync();
+            return await _context.Courses.AnyAsync(c => c.Name == course.Name && c.Description == course.Description);
         }
+
 
     }
 }
