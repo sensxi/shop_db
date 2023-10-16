@@ -128,14 +128,5 @@ namespace Task9.Controllers
             return RedirectToAction(nameof(Index));
 
         }
-
-        // GET: Course/GroupList/5
-        public async Task<IActionResult> ListGroup(int courseId)
-        {
-            ViewData["CourseId"] = courseId;
-            var groups = await _courseService.GetAllAsync(courseId);
-
-            return View(groups);
-        }
     }
 }

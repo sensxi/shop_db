@@ -16,8 +16,6 @@ namespace Task9.Repository.CourseRepository
 
         Task<bool> DeleteAsync(int id);
 
-        Task<List<Group>> GetAllAsync(int id);
-
         Task<bool> DubbingCheck(Course course);
     }
 }

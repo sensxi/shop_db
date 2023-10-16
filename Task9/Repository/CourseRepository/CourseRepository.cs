@@ -18,11 +18,6 @@ namespace Task9.Repository.CourseRepository
             return await _context.Courses.ToListAsync();
         }
 
-        public async Task<List<Group>> GetAllAsync(int id)
-        {
-            return await _context.Groups.Where(g => g.Id == id).ToListAsync();
-        }
-
         public async Task<Course> GetAsync(int id)
         {
             return await _context.Courses.FindAsync(id);

@@ -40,11 +40,6 @@ namespace Task9.Services.CourseService
             return await _courseRepository.DeleteAsync(id);
         }
 
-        public async Task<List<Group>> GetAllAsync(int courseId)
-        {
-            return await _courseRepository.GetAllAsync(courseId);
-        }
-
         public async Task<bool> CourseHasGroupAsync(int id)
         {
             return await _courseRepository.CourseHasGroupAsync(id);
