@@ -106,9 +106,6 @@ namespace Task9.Controllers
                 return NotFound();
             }
 
-            var hasStudents = await _groupService.GroupHasStudentsAsync(tgroup.Id);
-            ViewData["HasStudents"] = hasStudents;
-
             return View(tgroup);
         }
 

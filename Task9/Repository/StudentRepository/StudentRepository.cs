@@ -25,7 +25,7 @@ namespace Task9.Repository.StudentRepository
 
         public async Task<List<Student>> GetAllAsync(int groupId)
         {
-            return await _context.Students.Where(g => g.Id == groupId).ToListAsync();
+            return await _context.Students.Where(g => g.GroupId == groupId).ToListAsync();
         }
 
         public List<Group> GetGroupsWithDefault()

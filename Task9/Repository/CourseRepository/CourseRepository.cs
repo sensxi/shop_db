@@ -28,6 +28,10 @@ namespace Task9.Repository.CourseRepository
             return await _context.Courses.FindAsync(id);
         }
 
+        public async Task<bool> CourseHasGroupAsync(int id)
+        {
+            return await _context.Groups.AnyAsync(s => s.CourseId == id);
+        }
         public async Task<bool> AddAsync(Course course)
         {
             _context.Add(course);

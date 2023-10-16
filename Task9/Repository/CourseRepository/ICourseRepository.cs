@@ -8,6 +8,8 @@ namespace Task9.Repository.CourseRepository
 
         Task<Course> GetAsync(int id);
 
+        Task<bool> CourseHasGroupAsync(int id);
+
         Task<bool> AddAsync(Course course);
 
         Task<bool> UpdateAsync(Course course);

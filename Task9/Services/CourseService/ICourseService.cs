@@ -16,6 +16,6 @@ namespace Task9.Services.CourseService
 
         Task<List<Group>> GetAllAsync(int courseId);
 
-
+        Task<bool> CourseHasGroupAsync(int id);
     }
 }

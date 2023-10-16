@@ -45,5 +45,9 @@ namespace Task9.Services.CourseService
             return await _courseRepository.GetAllAsync(courseId);
         }
 
+        public async Task<bool> CourseHasGroupAsync(int id)
+        {
+            return await _courseRepository.CourseHasGroupAsync(id);
+        }
     }
 }

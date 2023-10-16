@@ -116,14 +116,17 @@ namespace Task9.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _courseService.DeleteAsync(id))
+            var hasGroup = await _courseService.CourseHasGroupAsync(id);
+            if (hasGroup)
             {
-                return RedirectToAction(nameof(Index));
+                ViewData["ErrorMessage"] = "Cannot delete group with students.";
+                return View("Delete", await _courseService.GetAsync(id));
             }
-            else
-            {
-                return Problem("Entity set 'ApplicationDbContext.Courses' is null.");
-            }
+
+            await _courseService.DeleteAsync(id);
+
+            return RedirectToAction(nameof(Index));
+
         }
 
         // GET: Course/GroupList/5

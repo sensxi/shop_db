@@ -25,7 +25,7 @@ namespace Task9.Repository.GroupRepository
 
         public async Task<List<Group>> GetAllAsync(int courseId)
         {
-            return await _context.Groups.Where(g => g.Id == courseId).ToListAsync();
+            return await _context.Groups.Where(g => g.CourseId == courseId).ToListAsync();
         }
 
         public List<Course> GetCourseWithDefault()
@@ -38,7 +38,7 @@ namespace Task9.Repository.GroupRepository
 
         public async Task<bool> GroupHasStudentsAsync(int id)
         {
-            return await _context.Students.AnyAsync(s => s.Id == id);
+            return await _context.Students.AnyAsync(s => s.GroupId == id);
         }
 
         public async Task<bool> AddAsync(Group group)
