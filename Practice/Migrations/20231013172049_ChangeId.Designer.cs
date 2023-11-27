@@ -11,8 +11,8 @@ using Task9.Data;
 namespace Task9.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231025121650_Test_Rider_Migration")]
-    partial class Test_Rider_Migration
+    [Migration("20231013172049_ChangeId")]
+    partial class ChangeId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace Task9.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Task9.Models.Course", b =>
+            modelBuilder.Entity("Practice.Models.Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,7 +44,7 @@ namespace Task9.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("Task9.Models.Group", b =>
+            modelBuilder.Entity("Practice.Models.Group", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -66,7 +66,7 @@ namespace Task9.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("Task9.Models.Student", b =>
+            modelBuilder.Entity("Practice.Models.Student", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -91,9 +91,9 @@ namespace Task9.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("Task9.Models.Group", b =>
+            modelBuilder.Entity("Practice.Models.Group", b =>
                 {
-                    b.HasOne("Task9.Models.Course", "Course")
+                    b.HasOne("Practice.Models.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -102,9 +102,9 @@ namespace Task9.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("Task9.Models.Student", b =>
+            modelBuilder.Entity("Practice.Models.Student", b =>
                 {
-                    b.HasOne("Task9.Models.Group", "Group")
+                    b.HasOne("Practice.Models.Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
