@@ -1,4 +1,4 @@
-﻿namespace Task9.Services
+﻿namespace Practice.Services
 {
     public interface IDataSeedService
     {

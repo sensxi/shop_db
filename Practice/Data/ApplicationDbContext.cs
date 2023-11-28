@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using Task9.Models;
+using Practice.Models;
 
-namespace Task9.Data
+namespace Practice.Data
 {
     public class ApplicationDbContext : DbContext
     {
@@ -10,8 +10,8 @@ namespace Task9.Data
         {
         }
 
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Group> Groups { get; set; }
-        public DbSet<Student> Students { get; set; }
+        public DbSet<Shop> Shops { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }

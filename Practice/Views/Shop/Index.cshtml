@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Practice.Models.Shop>
+
+@{
+    ViewData["PageTitle"] = "Shop page";
+}
+
+<p>
+    <a asp-action="SeedDatabase" asp-controller="Home">Fill DB</a> |
+    <a asp-action="Add">Create New</a> |
+    <a asp-action="Index" asp-controller="Department">To All Departments List</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a href="@Url.Action("DepartmentList", "Department", new { shopId = item.Id })">List of departments for this shop</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

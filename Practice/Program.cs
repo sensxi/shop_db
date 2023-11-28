@@ -1,13 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using Task9.Models;
-using Task9.Data;
-using Task9.Services;
-using Task9.Services.CourseService;
-using Task9.Services.GroupService;
-using Task9.Services.StudentService;
-using Task9.Repository.CourseRepository;
-using Task9.Repository.GroupRepository;
-using Task9.Repository.StudentRepository;
+using Practice.Models;
+using Practice.Data;
+using Practice.Repository.ShopRepository;
+using Practice.Services;
+using Practice.Services.ShopService;
+using Practice.Services.DepartmentService;
+using Practice.Services.ProductService;
+using Practice.Repository.ShopRepository;
+using Practice.Repository.DepartmentRepository;
+using Practice.Repository.ProductRepository;
 
 
 
@@ -19,14 +20,14 @@ builder.Services.AddControllersWithViews();
 //Add custom services
 builder.Services.AddScoped<IDataSeedService, DataSeedService>();
 
-builder.Services.AddScoped<ICourseService, CourseService>();
-builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+builder.Services.AddScoped<IShopService, ShopService>();
+builder.Services.AddScoped<IShopRepository, ShopRepository>();
 
-builder.Services.AddScoped<IGroupService, GroupService>();
-builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
-builder.Services.AddScoped<IStudentService, StudentService>();
-builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 //DI
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -52,6 +53,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Course}/{action=Index}/{id?}");
+    pattern: "{controller=Shop}/{action=Index}/{id?}");
 
 app.Run();

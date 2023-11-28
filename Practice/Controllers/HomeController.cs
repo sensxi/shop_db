@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using Task9.Models;
-using Task9.Services;
+using Practice.Services;
+using Practice.Models;
 
-namespace Task9.Controllers
+namespace Practice.Controllers
 {
     public class HomeController : Controller
     {
